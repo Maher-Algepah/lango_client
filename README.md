@@ -15,7 +15,7 @@ If you are developing a production application, we recommend using TypeScript wi
 # Instalation
 1. Clone the repo
 2. npm i
-3. you will need .env file, since it's a demo I can share it here:
+3. you will need .env file in the root directory, since it's a demo I can share it here:
 ```PORT=3000
 MONGODB_URI=mongodb+srv://engouser:uc9O045mDcg5cmYF@cluster0.o2btz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 JWT_SECRET=lango_super_secret_key_2024
@@ -25,3 +25,5 @@ JWT_EXPIRE=30d
 
 You should see the following output in terminal:
 ![image](https://github.com/user-attachments/assets/de5dacd0-60c2-4ee9-8f33-ce37446a521d)
+
+If the port 3000 in use you can change it in .env file

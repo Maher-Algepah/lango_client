@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 
 const ProtectedNavbar = ({ username }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -18,9 +20,8 @@ const ProtectedNavbar = ({ username }) => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('username');
-    navigate('/login');
+    logout();
+    navigate('/');
   };
 
   return (

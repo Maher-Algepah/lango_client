@@ -32,16 +32,25 @@ const Login = () => {
       });
 
       const data = await response.json();
+      console.log('Login response:', data); // Debug log
 
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
       }
 
-      // Store the token in localStorage
+      // Store the token and username in localStorage
       localStorage.setItem('userToken', data.token);
+      // Check if the username exists in the response
+      if (data.user && data.user.username) {
+        localStorage.setItem('username', data.user.username);
+      } else if (data.username) {
+        localStorage.setItem('username', data.username);
+      } else {
+        console.error('Username not found in response:', data);
+      }
       
-      // Redirect to home page
-      navigate('/');
+      // Redirect to dashboard
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
     } finally {

@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const navigate = useNavigate();
   const languages = [
     { name: 'English', flag: '🇬🇧' },
     { name: 'Spanish', flag: '🇪🇸' },
@@ -12,6 +14,10 @@ const Home = () => {
     { name: 'Chinese', flag: '🇨🇳' },
     { name: 'Korean', flag: '🇰🇷' }
   ];
+
+  const handleGetStarted = () => {
+    navigate('/register');
+  };
 
   return (
     <>
@@ -27,7 +33,10 @@ const Home = () => {
               The world's best way to learn a language. It's 100% free, fun, and scientifically proven to work.
             </p>
             <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
-              <button className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-green-500 hover:bg-green-600 md:py-4 md:text-lg md:px-10">
+              <button 
+                onClick={handleGetStarted}
+                className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-green-500 hover:bg-green-600 md:py-4 md:text-lg md:px-10 transition-colors duration-200"
+              >
                 Get Started
               </button>
             </div>
@@ -45,6 +54,7 @@ const Home = () => {
             {languages.map((language) => (
               <button
                 key={language.name}
+                onClick={handleGetStarted}
                 className="group p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 border border-gray-200 hover:border-green-500 hover:scale-105 hover:bg-green-50"
               >
                 <div className="flex items-center space-x-3">

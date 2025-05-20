@@ -1,9 +1,35 @@
-import Home from './pages/Home'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import ProtectedRoute from './components/ProtectedRoute';
+import AuthRedirect from './components/AuthRedirect';
 
 function App() {
   return (
-    <Home />
-  )
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <AuthRedirect>
+              <Layout><Home /></Layout>
+            </AuthRedirect>
+          }
+        />
+        <Route path="/login" element={<Layout><Login /></Layout>} />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;

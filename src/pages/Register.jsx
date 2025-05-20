@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../auth/AuthContext';
 
@@ -21,6 +21,21 @@ const Register = () => {
   const [focusedField, setFocusedField] = useState(null);
   const navigate = useNavigate();
   const { login } = useAuth();
+
+  // Add effect to handle password match popup
+  useEffect(() => {
+    let timer;
+    if (passwordRequirements.match && focusedField === 'confirmPassword') {
+      timer = setTimeout(() => {
+        setFocusedField(null);
+      }, 500);
+    }
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [passwordRequirements.match, focusedField]);
 
   const validatePassword = (password) => {
     const requirements = {

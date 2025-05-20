@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +10,8 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -32,25 +35,23 @@ const Login = () => {
       });
 
       const data = await response.json();
-      console.log('Login response:', data); // Debug log
 
       if (!response.ok) {
         throw new Error(data.message || 'Login failed');
       }
 
-      // Store the token and username in localStorage
-      localStorage.setItem('userToken', data.token);
-      // Check if the username exists in the response
-      if (data.user && data.user.username) {
-        localStorage.setItem('username', data.user.username);
-      } else if (data.username) {
-        localStorage.setItem('username', data.username);
-      } else {
-        console.error('Username not found in response:', data);
+      // Get username from response
+      const username = data.user?.username || data.username;
+      if (!username) {
+        throw new Error('Username not found in response');
       }
+
+      // Use the login function from AuthContext
+      login(data.token, username);
       
-      // Redirect to dashboard
-      navigate('/dashboard');
+      // Redirect to the page they tried to visit or dashboard
+      const from = location.state?.from || '/dashboard';
+      navigate(from);
     } catch (err) {
       setError(err.message);
     } finally {

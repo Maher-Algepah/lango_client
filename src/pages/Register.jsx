@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -10,7 +11,6 @@ const Register = () => {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [passwordRequirements, setPasswordRequirements] = useState({
     length: false,
     uppercase: false,
@@ -20,24 +20,7 @@ const Register = () => {
   });
   const [focusedField, setFocusedField] = useState(null);
   const navigate = useNavigate();
-
-  // Check if user is already logged in
-  useEffect(() => {
-    const userToken = localStorage.getItem('userToken');
-    if (userToken) {
-      navigate('/dashboard');
-    }
-    setIsCheckingAuth(false);
-  }, [navigate]);
-
-  // Show loading state while checking authentication
-  if (isCheckingAuth) {
-    return (
-      <div className="h-[calc(100vh-6rem)] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
-      </div>
-    );
-  }
+  const { login } = useAuth();
 
   const validatePassword = (password) => {
     const requirements = {
@@ -114,17 +97,11 @@ const Register = () => {
         throw new Error(data.message || 'Registration failed');
       }
 
-      // Store the token and username in localStorage
-      localStorage.setItem('userToken', data.token);
-      // Check if the username exists in the response
-      if (data.user && data.user.username) {
-        localStorage.setItem('username', data.user.username);
-      } else if (data.username) {
-        localStorage.setItem('username', data.username);
-      } else {
-        // If username is not in response, use the one from form
-        localStorage.setItem('username', formData.username);
-      }
+      // Get username from response
+      const username = data.user?.username || data.username || formData.username;
+      
+      // Use the login function from AuthContext
+      login(data.token, username);
       
       // Redirect to dashboard
       navigate('/dashboard');

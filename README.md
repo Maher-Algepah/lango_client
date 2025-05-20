@@ -20,3 +20,5 @@ If you are developing a production application, we recommend using TypeScript wi
 You should see the following output in terminal:
 ![image](https://github.com/user-attachments/assets/10dbe45f-36f6-42f6-94ba-0ebeb40342c7)
 
+## Chat history can be found in the file: 
+/cursor_creating_react_app_with_vite.md
